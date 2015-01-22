@@ -5,7 +5,6 @@ var jsyaml = require('js-yaml');
 var patch = require('../../vendor/liquid.patch');
 
 var ModalView = require('./modal');
-var key = require('keymaster');
 var marked = require('marked');
 var diff = require('diff');
 var Backbone = require('backbone');
@@ -290,6 +289,9 @@ module.exports = Backbone.View.extend({
             path = path.split(titleAttribute)[0];
           }
 
+          // Remove {{site.baseurl}}
+          path = path.replace('{{site.baseurl}}/', '/');
+
           // Prepend directory path if not site root relative
           path = /^\//.test(path) ? path.slice(1) :
             util.extractFilename(this.model.get('path'))[0] + '/' + path;
@@ -307,10 +309,11 @@ module.exports = Backbone.View.extend({
   initEditor: function() {
     var lang = this.model.get('lang');
 
+    var code = this.$el.find('#code')[0];
+    code.value = this.model.get('content') || '';
     // TODO: set default content for CodeMirror
-    this.editor = CodeMirror(this.$el.find('#code')[0], {
+    this.editor = CodeMirror.fromTextArea(code, {
       mode: lang,
-      value: this.model.get('content') || '',
       lineWrapping: true,
       lineNumbers: (lang === 'gfm' || lang === null) ? false : true,
       extraKeys: this.keyMap(),
@@ -535,7 +538,7 @@ module.exports = Backbone.View.extend({
         mode.push('meta');
       }
 
-      if (markdown || (jekyll && this.model.get('extension') === 'html')) mode.push('preview');
+      if (markdown || this.model.get('extension') === 'html') mode.push('preview');
       if (!this.model.isNew()) mode.push('settings');
 
       this.nav.mode(mode.join(' '));
@@ -648,16 +651,22 @@ module.exports = Backbone.View.extend({
       metadata = this.model.get('metadata') || {};
       content = this.model.get('content') || '';
     }
+    
+    // Run the liquid parsing.
+    var parsedTemplate = Liquid.parse(this.compilePreview(content)).render({
+      site: this.collection.config,
+      post: metadata,
+      page: metadata
+    });
+    
+    // If it's markdown, run it through marked; otherwise, leave it alone.
+    if(this.model.get('markdown'))  parsedTemplate = marked(parsedTemplate);
 
     var p = {
       site: this.collection.config,
       post: metadata,
       page: metadata,
-      content: marked(Liquid.parse(this.compilePreview(content)).render({
-        site: this.collection.config,
-        post: metadata,
-        page: metadata
-      })) || ''
+      content: parsedTemplate || ''
     };
 
     // Grab a date from the filename
@@ -1259,8 +1268,8 @@ module.exports = Backbone.View.extend({
   },
 
   updateImageInsert: function(e, file, content) {
-    var path = (this.mediaDirectoryPath) ?
-                    this.mediaDirectoryPath :
+    var path = (this.toolbar.mediaDirectoryPath) ?
+                    this.toolbar.mediaDirectoryPath :
                     util.extractFilename(this.toolbar.file.attributes.path)[0];
     var src = path + '/' + encodeURIComponent(file.name);
 
@@ -1287,14 +1296,14 @@ module.exports = Backbone.View.extend({
     this.collection.upload(file, content, path, {
       success: (function(model, res, options) {
         var name = res.content.name;
-        var path = res.content.path;
+        var path = '{{site.baseurl}}/' + res.content.path;
 
         // Take the alt text from the insert image box on the toolbar
         var $alt = $('input[name="alt"]');
         var value = $alt.val();
         var image = (value) ?
-          '![' + value + '](/' + path + ')' :
-          '![' + name + '](/' + path + ')';
+          '![' + value + '](' + path + ')' :
+          '![' + name + '](' + path + ')';
 
         this.editor.focus();
         this.editor.replaceSelection(image + '\n', 'end');
