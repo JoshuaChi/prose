@@ -99,11 +99,11 @@ __Note:__ You should not commit the `oauth.json` file to a remote repo or along 
 request.
 
 __Note:__ When you authorize the application the public gatekeeper will redirect
-to prose.io with a path that looks something like `http://prose.io/?code=36f237f41bd81c1a3661`. The code
+to prose.freetofeel.com with a path that looks something like `http://prose.freetofeel.com/?code=36f237f41bd81c1a3661`. The code
 param represents the auth string. You can manually set the URL back to your prose instance.
 
     Change
-    http://prose.io/?code=36f237f41bd81c1a3661
+    http://prose.freetofeel.com/?code=36f237f41bd81c1a3661
 
     Back to
     http://localhost:3000/?code=36f237f41bd81c1a3661
