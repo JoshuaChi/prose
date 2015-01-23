@@ -2,7 +2,12 @@
   "name": "prose",
   "version": "1.1.13",
   "description": "[Prose](http://prose.freetofeel.com) is a web-based interface for managing text-based content in your GitHub repositories. Use it to create, edit, and delete files, and save your changes directly to GitHub.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
+    "express": "~4.9.x"
     "jquery-browserify": "~1.8.1",
     "chosen-jquery-browserify": "~0.9.15",
     "js-yaml": "git://github.com/prose/js-yaml.git",
@@ -17,6 +22,13 @@
     "deepmerge": "~0.2.7",
     "ignore": "~2.2.7",
     "serve": "^1.4.0"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JoshuaChi/prose.git"
   },
   "keywords": [
     "editor",
@@ -44,9 +56,6 @@
     "vinyl-source-stream": "^0.1.1",
     "connect": "^3.3.4"
   },
-  "scripts": {
-    "test": "node_modules/.bin/gulp && node_modules/.bin/mocha-phantomjs test/index.html"
-  },
   "browserify": {
     "transform": [
       "browserify-shim"
@@ -54,10 +63,6 @@
   },
   "browserify-shim": {
     "chai": "global:chai"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/prose/prose.git"
   },
   "author": "Development Seed",
   "license": "BSD",
