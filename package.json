@@ -6,7 +6,7 @@
     "jquery-browserify": "~1.8.1",
     "chosen-jquery-browserify": "~0.9.15",
     "js-yaml": "git://github.com/prose/js-yaml.git",
-    "backbone": "~1.0.0",
+    "backbone": "~1.1.2",
     "underscore": "~1.4.4",
     "chrono": "~1.0.4",
     "js-base64": "~2.1.1",
@@ -15,7 +15,8 @@
     "queue-async": "~1.0.3",
     "diff": "~1.0.4",
     "deepmerge": "~0.2.7",
-    "ignore": "~2.2.7"
+    "ignore": "~2.2.7",
+    "serve": "^1.4.0"
   },
   "keywords": [
     "editor",
@@ -41,8 +42,7 @@
     "sinon-chai": "^2.6.0",
     "uglify-js": "~2.2.5",
     "vinyl-source-stream": "^0.1.1",
-    "connect": "^3.3.4",
-    "serve": "^1.4.0"
+    "connect": "^3.3.4"
   },
   "scripts": {
     "test": "node_modules/.bin/gulp && node_modules/.bin/mocha-phantomjs test/index.html"
