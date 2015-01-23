@@ -1,1 +1,1 @@
-web: serve
+web: node index.js
