@@ -7,7 +7,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "express": "~4.9.x"
+    "express": "~4.9.x",
     "jquery-browserify": "~1.8.1",
     "chosen-jquery-browserify": "~0.9.15",
     "js-yaml": "git://github.com/prose/js-yaml.git",
